@@ -51,7 +51,7 @@
     gap:1px;
     background:var(--line);
     border:1px solid var(--line);
-    margin-bottom:40px;
+    margin-bottom:32px;
   }
   .total-cell{
     background:var(--panel);
@@ -68,6 +68,31 @@
     color:var(--muted);
     margin-top:4px;
   }
+
+  /* Tabs */
+  .tabs{
+    display:flex;
+    gap:2px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:20px;
+  }
+  .tab-btn{
+    background:none;
+    border:none;
+    color:var(--muted);
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:500;
+    font-size:0.85rem;
+    padding:10px 18px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    margin-bottom:-1px;
+  }
+  .tab-btn:hover{color:var(--text);}
+  .tab-btn.active{color:var(--power);border-bottom-color:var(--power);}
+
+  .view{display:none;}
+  .view.active{display:block;}
 
   .table-wrap{
     border:1px solid var(--line);
@@ -120,6 +145,49 @@
   td.muted{color:var(--muted);}
   .pair-max{color:var(--muted);font-size:0.9em;}
 
+  /* Graph view */
+  .metric-picker{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:20px;
+  }
+  .metric-btn{
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    padding:6px 12px;
+    cursor:pointer;
+  }
+  .metric-btn:hover{color:var(--text);border-color:#3a4552;}
+  .metric-btn.active{color:var(--bg);font-weight:600;}
+
+  .chart-wrap{
+    border:1px solid var(--line);
+    background:var(--panel);
+    padding:20px;
+    box-shadow:0 20px 40px -20px rgba(0,0,0,0.5);
+    position:relative;
+  }
+  .chart-wrap svg{display:block;width:100%;height:auto;}
+  .chart-empty{color:var(--muted);font-size:0.85rem;text-align:center;padding:60px 0;}
+
+  #tooltip{
+    position:absolute;
+    display:none;
+    background:#0F1318;
+    border:1px solid var(--line);
+    padding:6px 10px;
+    font-size:0.7rem;
+    pointer-events:none;
+    white-space:nowrap;
+    z-index:10;
+  }
+  #tooltip .t-date{color:var(--muted);}
+  #tooltip .t-val{font-family:'Space Grotesk', sans-serif;font-weight:700;}
+
   #picker-wrap{
     display:none;
     border:1px dashed var(--line);
@@ -160,38 +228,53 @@
 
   <div id="totals" class="totals"></div>
 
-  <div class="table-wrap">
-    <table id="ride-table">
-      <colgroup>
-        <col class="date">
-        <col class="name">
-        <col class="sm">
-        <col class="sm">
-        <col class="sm">
-        <col class="pair">
-        <col class="pair">
-        <col class="pair">
-        <col class="sm">
-        <col class="sm">
-        <col class="sm">
-      </colgroup>
-      <thead>
-        <tr>
-          <th data-key="date">Date</th>
-          <th data-key="map_name">Route</th>
-          <th data-key="distance_km" class="num">Km</th>
-          <th data-key="moving_time" class="num">Time</th>
-          <th data-key="elevation_m" class="num">Elev</th>
-          <th data-key="power_avg_w" class="num power">Watts (avg/max)</th>
-          <th data-key="speed_avg_kmh" class="num speed">km/h (avg/max)</th>
-          <th data-key="heart_rate_avg_bpm" class="num hr">HR (avg/max)</th>
-          <th data-key="cadence_avg" class="num">Cad</th>
-          <th data-key="calories" class="num">Cal</th>
-          <th data-key="relative_effort" class="num">Effort</th>
-        </tr>
-      </thead>
-      <tbody id="rides"></tbody>
-    </table>
+  <div class="tabs">
+    <button class="tab-btn active" data-view="table-view">Table</button>
+    <button class="tab-btn" data-view="graph-view">Graphs</button>
+  </div>
+
+  <div id="table-view" class="view active">
+    <div class="table-wrap">
+      <table id="ride-table">
+        <colgroup>
+          <col class="date">
+          <col class="name">
+          <col class="sm">
+          <col class="sm">
+          <col class="sm">
+          <col class="pair">
+          <col class="pair">
+          <col class="pair">
+          <col class="sm">
+          <col class="sm">
+          <col class="sm">
+        </colgroup>
+        <thead>
+          <tr>
+            <th data-key="date">Date</th>
+            <th data-key="map_name">Route</th>
+            <th data-key="distance_km" class="num">Km</th>
+            <th data-key="moving_time" class="num">Time</th>
+            <th data-key="elevation_m" class="num">Elev</th>
+            <th data-key="power_avg_w" class="num power">Watts (avg/max)</th>
+            <th data-key="speed_avg_kmh" class="num speed">km/h (avg/max)</th>
+            <th data-key="heart_rate_avg_bpm" class="num hr">HR (avg/max)</th>
+            <th data-key="cadence_avg" class="num">Cad</th>
+            <th data-key="calories" class="num">Cal</th>
+            <th data-key="relative_effort" class="num">Effort</th>
+          </tr>
+        </thead>
+        <tbody id="rides"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="graph-view" class="view">
+    <div class="metric-picker" id="metric-picker"></div>
+    <div class="chart-wrap">
+      <div id="chart-container"></div>
+      <div id="tooltip"></div>
+    </div>
   </div>
 </div>
 
@@ -199,6 +282,7 @@
 let currentRides = [];
 let sortKey = 'date';
 let sortAsc = true;
+let activeMetric = 'power';
 
 const fmt = (v, unit = '') => (v === null || v === undefined) ? '—' : `${v}${unit}`;
 
@@ -263,10 +347,160 @@ function renderRows() {
   });
 }
 
+/* ---------------- Tabs ---------------- */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.view).classList.add('active');
+    if (btn.dataset.view === 'graph-view') drawChart();
+  });
+});
+
+/* ---------------- Graphs ---------------- */
+const METRICS = [
+  { id: 'power',     label: 'Power',     unit: 'W',     color: '--power', get: r => r.power_avg_w },
+  { id: 'speed',     label: 'Speed',     unit: 'km/h',  color: '--speed', get: r => r.speed_avg_kmh },
+  { id: 'hr',        label: 'Heart Rate',unit: 'bpm',   color: '--hr',    get: r => r.heart_rate_avg_bpm },
+  { id: 'distance',  label: 'Distance',  unit: 'km',    color: '--text',  get: r => r.distance_km },
+  { id: 'time',      label: 'Time',      unit: 'min',   color: '--text',  get: r => Math.round(parseDuration(r.moving_time) / 60) },
+  { id: 'elevation', label: 'Elevation', unit: 'm',     color: '--text',  get: r => r.elevation_m },
+  { id: 'cadence',   label: 'Cadence',   unit: 'rpm',   color: '--text',  get: r => r.cadence_avg },
+  { id: 'calories',  label: 'Calories',  unit: 'kcal',  color: '--text',  get: r => r.calories },
+  { id: 'effort',    label: 'Effort',    unit: '',      color: '--text',  get: r => r.relative_effort },
+];
+
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function buildMetricPicker() {
+  const wrap = document.getElementById('metric-picker');
+  wrap.innerHTML = METRICS.map(m => `<button class="metric-btn" data-metric="${m.id}">${m.label}</button>`).join('');
+  wrap.querySelectorAll('.metric-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeMetric = btn.dataset.metric;
+      drawChart();
+    });
+  });
+}
+
+function formatAxisDate(d, showYear) {
+  const opts = showYear ? { day: 'numeric', month: 'short', year: '2-digit' } : { day: 'numeric', month: 'short' };
+  return d.toLocaleDateString('en-GB', opts);
+}
+
+function drawChart() {
+  const wrap = document.getElementById('metric-picker');
+  wrap.querySelectorAll('.metric-btn').forEach(btn => {
+    const m = METRICS.find(mm => mm.id === btn.dataset.metric);
+    const active = btn.dataset.metric === activeMetric;
+    btn.classList.toggle('active', active);
+    btn.style.borderColor = active ? cssVar(m.color) : '';
+    btn.style.color = active ? cssVar(m.color) : '';
+    btn.style.background = active ? 'rgba(255,255,255,0.03)' : '';
+  });
+
+  const metric = METRICS.find(m => m.id === activeMetric);
+  const container = document.getElementById('chart-container');
+
+  const points = currentRides
+    .map(r => ({ date: new Date(r.date), value: metric.get(r), ride: r }))
+    .filter(p => p.value !== null && p.value !== undefined && !isNaN(p.date.getTime()))
+    .sort((a, b) => a.date - b.date);
+
+  if (points.length === 0) {
+    container.innerHTML = `<div class="chart-empty">No data for ${metric.label} yet.</div>`;
+    return;
+  }
+
+  const W = 900, H = 340;
+  const padL = 46, padR = 20, padT = 20, padB = 36;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  let xMin = points[0].date.getTime();
+  let xMax = points[points.length - 1].date.getTime();
+  if (xMin === xMax) { xMin -= 86400000; xMax += 86400000; }
+
+  let values = points.map(p => p.value);
+  let yMin = Math.min(...values);
+  let yMax = Math.max(...values);
+  if (yMin === yMax) { yMin -= 1; yMax += 1; }
+  const yPad = (yMax - yMin) * 0.15;
+  yMin -= yPad; yMax += yPad;
+  if (metric.id !== 'elevation' && yMin > 0 && (yMin / (yMax - yMin)) < 0.3) yMin = 0;
+
+  const xScale = t => padL + ((t - xMin) / (xMax - xMin)) * plotW;
+  const yScale = v => padT + plotH - ((v - yMin) / (yMax - yMin)) * plotH;
+
+  const color = cssVar(metric.color) || cssVar('--text');
+  const lineColor = metric.color === '--text' ? cssVar('--muted') : color;
+
+  const linePoints = points.map(p => `${xScale(p.date.getTime())},${yScale(p.value)}`).join(' ');
+  const areaPoints = `${xScale(points[0].date.getTime())},${padT + plotH} ` + linePoints +
+    ` ${xScale(points[points.length - 1].date.getTime())},${padT + plotH}`;
+
+  // y-axis ticks
+  const tickCount = 4;
+  let yTicks = [];
+  for (let i = 0; i <= tickCount; i++) yTicks.push(yMin + (i * (yMax - yMin) / tickCount));
+
+  // x-axis ticks (thin out if many points)
+  const maxXTicks = 7;
+  const step = Math.max(1, Math.ceil(points.length / maxXTicks));
+  const spansMultipleYears = points[0].date.getFullYear() !== points[points.length - 1].date.getFullYear();
+  let xTicks = [];
+  for (let i = 0; i < points.length; i += step) xTicks.push(points[i]);
+  if (xTicks[xTicks.length - 1] !== points[points.length - 1]) xTicks.push(points[points.length - 1]);
+
+  const gridLines = yTicks.map(v => `
+    <line x1="${padL}" y1="${yScale(v)}" x2="${W - padR}" y2="${yScale(v)}" stroke="${cssVar('--line')}" stroke-width="1" />
+    <text x="${padL - 8}" y="${yScale(v) + 3}" text-anchor="end" font-size="10" fill="${cssVar('--muted')}" font-family="IBM Plex Mono, monospace">${Math.round(v)}</text>
+  `).join('');
+
+  const xLabels = xTicks.map(p => `
+    <text x="${xScale(p.date.getTime())}" y="${H - 12}" text-anchor="middle" font-size="10" fill="${cssVar('--muted')}" font-family="IBM Plex Mono, monospace">${formatAxisDate(p.date, spansMultipleYears)}</text>
+  `).join('');
+
+  const dots = points.map((p, i) => `
+    <circle class="pt" data-i="${i}" cx="${xScale(p.date.getTime())}" cy="${yScale(p.value)}" r="3.5" fill="${lineColor}" stroke="${cssVar('--panel')}" stroke-width="1.5" />
+  `).join('');
+
+  container.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      ${gridLines}
+      <polygon points="${areaPoints}" fill="${lineColor}" opacity="0.08" />
+      <polyline points="${linePoints}" fill="none" stroke="${lineColor}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+      ${dots}
+      ${xLabels}
+      <line x1="${padL}" y1="${padT + plotH}" x2="${W - padR}" y2="${padT + plotH}" stroke="${cssVar('--line')}" stroke-width="1" />
+    </svg>
+  `;
+
+  const tooltip = document.getElementById('tooltip');
+  container.querySelectorAll('.pt').forEach(circle => {
+    circle.addEventListener('mouseenter', (e) => {
+      const p = points[+circle.dataset.i];
+      tooltip.innerHTML = `<span class="t-date">${p.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span><br><span class="t-val">${p.value}${metric.unit ? ' ' + metric.unit : ''}</span>`;
+      tooltip.style.display = 'block';
+    });
+    circle.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (e.clientY - rect.top - 30) + 'px';
+    });
+    circle.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+  });
+}
+
+/* ---------------- Boot ---------------- */
 function render(data) {
   currentRides = data.rides || [];
   renderTotals(currentRides);
   renderRows();
+  if (document.getElementById('graph-view').classList.contains('active')) drawChart();
   document.getElementById('status').textContent = `Loaded ${currentRides.length} ride(s) from data.json`;
 }
 
@@ -302,6 +536,8 @@ function showPicker() {
     reader.readAsText(file);
   });
 }
+
+buildMetricPicker();
 
 fetch('data.json')
   .then(res => {
