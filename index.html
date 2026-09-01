@@ -115,15 +115,15 @@
   }
   table{
     width:100%;
-    min-width:1200px;
+    min-width:1190px;
     table-layout:fixed;
     border-collapse:collapse;
     font-size:0.74rem;
     white-space:nowrap;
   }
   col.idx{width:3.5%;}
-  col.name{width:18%;}
-  col.date{width:8%;}
+  col.name{width:16%;}
+  col.date{width:9%;}
   col.sm{width:6%;}
   col.pair{width:11%;}
   thead th{
@@ -281,6 +281,7 @@
           <col class="sm">
           <col class="sm">
           <col class="pair">
+          <col class="sm">
           <col class="pair">
           <col class="pair">
           <col class="sm">
@@ -296,6 +297,7 @@
             <th data-key="moving_time" class="num">Time</th>
             <th data-key="elevation_m" class="num">Elev</th>
             <th data-key="power_avg_w" class="num power">Watts (avg/max)</th>
+            <th data-key="ftp" class="num power">FTP</th>
             <th data-key="speed_avg_kmh" class="num speed">km/h (avg/max)</th>
             <th data-key="heart_rate_avg_bpm" class="num hr">HR (avg/max)</th>
             <th data-key="cadence_avg" class="num">Cad</th>
@@ -344,11 +346,13 @@ function renderTotals(rides) {
   const totalCals = rides.reduce((s, r) => s + (r.calories || 0), 0);
   const totalKj = rides.reduce((s, r) => s + (r.total_work_kj || 0), 0);
   const totalTime = rides.reduce((s, r) => s + parseDuration(r.moving_time), 0);
+  const totalElevation = rides.reduce((s, r) => s + (r.elevation_m || 0), 0);
 
   document.getElementById('totals').innerHTML = `
     <div class="total-cell"><div class="num">${rides.length}</div><div class="label">Rides logged</div></div>
     <div class="total-cell"><div class="num">${totalDist.toFixed(1)}</div><div class="label">Total distance (km)</div></div>
     <div class="total-cell"><div class="num">${formatDuration(totalTime)}</div><div class="label">Time in the saddle</div></div>
+    <div class="total-cell"><div class="num">${totalElevation}</div><div class="label">Total elevation (m)</div></div>
     <div class="total-cell"><div class="num">${totalCals}</div><div class="label">Calories burned</div></div>
     <div class="total-cell"><div class="num">${totalKj}</div><div class="label">Total work (kJ)</div></div>
   `;
@@ -374,6 +378,7 @@ function renderRows() {
       <td class="num muted">${fmt(r.moving_time)}</td>
       <td class="num muted">${fmt(r.elevation_m)}</td>
       <td class="num power">${pair(r.power_avg_w, r.power_max_w)}</td>
+      <td class="num power">${fmt(r.ftp, ' W')}</td>
       <td class="num speed">${pair(r.speed_avg_kmh, r.speed_max_kmh)}</td>
       <td class="num hr">${pair(r.heart_rate_avg_bpm, r.heart_rate_max_bpm)}</td>
       <td class="num muted">${fmt(r.cadence_avg)}</td>
@@ -401,6 +406,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 /* ---------------- Graphs ---------------- */
 const METRICS = [
   { id: 'power',     label: 'Power',      unit: 'W',     color: '--power', get: r => r.power_avg_w },
+  { id: 'ftp',       label: 'FTP',        unit: 'W',     color: '--power', get: r => r.ftp },
   { id: 'speed',     label: 'Speed',      unit: 'km/h',  color: '--speed', get: r => r.speed_avg_kmh },
   { id: 'hr',        label: 'Heart rate', unit: 'bpm',   color: '--hr',    get: r => r.heart_rate_avg_bpm },
   { id: 'distance',  label: 'Distance',   unit: 'km',    color: '--text',  get: r => r.distance_km },
