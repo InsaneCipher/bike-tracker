@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ride Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -101,6 +102,7 @@
   }
   table{
     width:100%;
+    min-width:1200px;
     table-layout:fixed;
     border-collapse:collapse;
     font-size:0.72rem;
@@ -130,6 +132,8 @@
     padding:3px 8px;
     border-bottom:1px solid var(--line);
     line-height:1.5;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
   tbody tr:hover{background:var(--panel);}
   tbody tr:last-child td{border-bottom:none;}
