@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ride Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12161B;
+    --panel:#1A2028;
+    --line:#2B333D;
+    --text:#E9EDF1;
+    --muted:#8A96A3;
+    --power:#C6E86B;
+    --hr:#E88B6B;
+    --speed:#6BB8E8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Mono', monospace;
+    padding:48px 24px 80px;
+  }
+  .wrap{max-width:920px;margin:0 auto;}
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:2rem;
+    margin:0 0 4px;
+    letter-spacing:-0.01em;
+  }
+  .subtitle{color:var(--muted);font-size:0.9rem;margin-bottom:36px;}
+
+  .totals{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-bottom:40px;
+  }
+  .total-cell{
+    background:var(--panel);
+    padding:20px 16px;
+  }
+  .total-cell .num{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:1.7rem;
+    font-weight:700;
+  }
+  .total-cell .label{
+    font-size:0.72rem;
+    color:var(--muted);
+    margin-top:4px;
+  }
+
+  .ride{
+    border:1px solid var(--line);
+    background:var(--panel);
+    margin-bottom:16px;
+    padding:20px 24px;
+  }
+  .ride-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .ride-name{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:500;
+    font-size:1.05rem;
+  }
+  .ride-date{color:var(--muted);font-size:0.82rem;}
+
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(90px,1fr));
+    gap:14px;
+  }
+  .stat{border-left:2px solid var(--line);padding-left:10px;}
+  .stat.power{border-left-color:var(--power);}
+  .stat.hr{border-left-color:var(--hr);}
+  .stat.speed{border-left-color:var(--speed);}
+  .stat .val{font-size:1rem;font-weight:600;}
+  .stat .sub{color:var(--muted);font-size:0.7rem;margin-top:2px;}
+
+  #picker-wrap{
+    display:none;
+    border:1px dashed var(--line);
+    padding:28px;
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:32px;
+    font-size:0.85rem;
+  }
+  #picker-wrap.show{display:block;}
+  #picker-wrap button{
+    background:var(--power);
+    color:#12161B;
+    border:none;
+    padding:8px 18px;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:0.8rem;
+    cursor:pointer;
+    margin-top:10px;
+  }
+  #status{color:var(--muted);font-size:0.8rem;margin-bottom:20px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Ride Log</h1>
+  <div class="subtitle">Virtual rides — MyWhoosh</div>
+
+  <div id="status"></div>
+
+  <div id="picker-wrap">
+    Couldn't auto-load <code>data.json</code> (browsers block this when a page is opened directly from disk).<br>
+    Pick the file manually instead:
+    <br>
+    <input type="file" id="file-input" accept=".json">
+  </div>
+
+  <div id="totals" class="totals"></div>
+  <div id="rides"></div>
+</div>
+
+<script>
+function render(data) {
+  const rides = (data.rides || []).slice().sort((a, b) => a.date.localeCompare(b.date));
+
+  // Totals
+  const totalDist = rides.reduce((s, r) => s + (r.distance_km || 0), 0);
+  const totalCals = rides.reduce((s, r) => s + (r.calories || 0), 0);
+  const totalKj = rides.reduce((s, r) => s + (r.total_work_kj || 0), 0);
+
+  const totalsEl = document.getElementById('totals');
+  totalsEl.innerHTML = `
+    <div class="total-cell"><div class="num">${rides.length}</div><div class="label">RIDES</div></div>
+    <div class="total-cell"><div class="num">${totalDist.toFixed(1)}</div><div class="label">TOTAL KM</div></div>
+    <div class="total-cell"><div class="num">${totalCals}</div><div class="label">CALORIES</div></div>
+    <div class="total-cell"><div class="num">${totalKj}</div><div class="label">TOTAL WORK (kJ)</div></div>
+  `;
+
+  const fmt = (v, unit = '') => (v === null || v === undefined) ? '—' : `${v}${unit}`;
+
+  const ridesEl = document.getElementById('rides');
+  ridesEl.innerHTML = rides.map(r => `
+    <div class="ride">
+      <div class="ride-top">
+        <div class="ride-name">${r.map_name || 'Untitled ride'}</div>
+        <div class="ride-date">${r.date || ''} · ${r.time || ''}</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="val">${fmt(r.distance_km, ' km')}</div><div class="sub">DISTANCE</div></div>
+        <div class="stat"><div class="val">${fmt(r.moving_time)}</div><div class="sub">MOVING TIME</div></div>
+        <div class="stat"><div class="val">${fmt(r.elevation_m, ' m')}</div><div class="sub">ELEVATION</div></div>
+        <div class="stat power"><div class="val">${fmt(r.power_avg_w, ' W')} / ${fmt(r.power_max_w, ' W')}</div><div class="sub">AVG / MAX POWER</div></div>
+        <div class="stat speed"><div class="val">${fmt(r.speed_avg_kmh, ' km/h')} / ${fmt(r.speed_max_kmh, ' km/h')}</div><div class="sub">AVG / MAX SPEED</div></div>
+        <div class="stat hr"><div class="val">${fmt(r.heart_rate_avg_bpm, ' bpm')} / ${fmt(r.heart_rate_max_bpm, ' bpm')}</div><div class="sub">AVG / MAX HR</div></div>
+        <div class="stat"><div class="val">${fmt(r.cadence_avg)} / ${fmt(r.cadence_max)}</div><div class="sub">AVG / MAX CADENCE</div></div>
+        <div class="stat"><div class="val">${fmt(r.relative_effort)}</div><div class="sub">RELATIVE EFFORT</div></div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('status').textContent = `Loaded ${rides.length} ride(s) from data.json`;
+}
+
+function showPicker() {
+  document.getElementById('picker-wrap').classList.add('show');
+  document.getElementById('status').textContent = '';
+  document.getElementById('file-input').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const data = JSON.parse(evt.target.result);
+        render(data);
+        document.getElementById('picker-wrap').classList.remove('show');
+      } catch (err) {
+        document.getElementById('status').textContent = 'Could not parse that file as JSON.';
+      }
+    };
+    reader.readAsText(file);
+  });
+}
+
+fetch('data.json')
+  .then(res => {
+    if (!res.ok) throw new Error('not found');
+    return res.json();
+  })
+  .then(render)
+  .catch(() => showPicker());
+</script>
+</body>
+</html>
