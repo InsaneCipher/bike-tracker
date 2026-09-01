@@ -19,12 +19,22 @@
   *{box-sizing:border-box;}
   body{
     margin:0;
-    background:var(--bg);
+    min-height:100vh;
     color:var(--text);
     font-family:'IBM Plex Mono', monospace;
     padding:48px 24px 80px;
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(1100px 600px at 12% -10%, rgba(198,232,107,0.06), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(107,184,232,0.05), transparent 55%),
+      linear-gradient(180deg, #14191F 0%, #0F1318 100%),
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:auto, auto, auto, 42px 42px, 42px 42px;
+    background-repeat:no-repeat, no-repeat, no-repeat, repeat, repeat;
+    background-attachment:fixed;
   }
-  .wrap{max-width:920px;margin:0 auto;}
+  .wrap{max-width:1200px;margin:0 auto;}
 
   h1{
     font-family:'Space Grotesk', sans-serif;
@@ -37,7 +47,7 @@
 
   .totals{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(5,1fr);
     gap:1px;
     background:var(--line);
     border:1px solid var(--line);
@@ -46,6 +56,7 @@
   .total-cell{
     background:var(--panel);
     padding:20px 16px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);
   }
   .total-cell .num{
     font-family:'Space Grotesk', sans-serif;
@@ -58,38 +69,56 @@
     margin-top:4px;
   }
 
-  .ride{
+  .table-wrap{
     border:1px solid var(--line);
-    background:var(--panel);
-    margin-bottom:16px;
-    padding:20px 24px;
+    overflow-x:auto;
+    box-shadow:0 20px 40px -20px rgba(0,0,0,0.5);
   }
-  .ride-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-bottom:14px;
+  table{
+    width:100%;
+    table-layout:fixed;
+    border-collapse:collapse;
+    font-size:0.72rem;
+    white-space:nowrap;
   }
-  .ride-name{
-    font-family:'Space Grotesk', sans-serif;
+  col.name{width:20%;}
+  col.date{width:9%;}
+  col.sm{width:6%;}
+  col.pair{width:11%;}
+  thead th{
+    text-align:left;
     font-weight:500;
-    font-size:1.05rem;
+    color:var(--muted);
+    font-size:0.62rem;
+    letter-spacing:0.02em;
+    padding:5px 8px;
+    background:var(--panel);
+    border-bottom:1px solid var(--line);
+    position:sticky;
+    top:0;
+    cursor:pointer;
+    user-select:none;
   }
-  .ride-date{color:var(--muted);font-size:0.82rem;}
-
-  .stat-row{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(90px,1fr));
-    gap:14px;
+  thead th:hover{color:var(--text);}
+  thead th.sorted{color:var(--power);}
+  tbody td{
+    padding:3px 8px;
+    border-bottom:1px solid var(--line);
+    line-height:1.5;
   }
-  .stat{border-left:2px solid var(--line);padding-left:10px;}
-  .stat.power{border-left-color:var(--power);}
-  .stat.hr{border-left-color:var(--hr);}
-  .stat.speed{border-left-color:var(--speed);}
-  .stat .val{font-size:1rem;font-weight:600;}
-  .stat .sub{color:var(--muted);font-size:0.7rem;margin-top:2px;}
+  tbody tr:hover{background:var(--panel);}
+  tbody tr:last-child td{border-bottom:none;}
+  td.name{
+    font-family:'Space Grotesk', sans-serif;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  td.num{text-align:left;font-variant-numeric:tabular-nums;}
+  td.power{color:var(--power);}
+  td.hr{color:var(--hr);}
+  td.speed{color:var(--speed);}
+  td.muted{color:var(--muted);}
+  .pair-max{color:var(--muted);font-size:0.9em;}
 
   #picker-wrap{
     display:none;
@@ -130,50 +159,129 @@
   </div>
 
   <div id="totals" class="totals"></div>
-  <div id="rides"></div>
+
+  <div class="table-wrap">
+    <table id="ride-table">
+      <colgroup>
+        <col class="date">
+        <col class="name">
+        <col class="sm">
+        <col class="sm">
+        <col class="sm">
+        <col class="pair">
+        <col class="pair">
+        <col class="pair">
+        <col class="sm">
+        <col class="sm">
+        <col class="sm">
+      </colgroup>
+      <thead>
+        <tr>
+          <th data-key="date">Date</th>
+          <th data-key="map_name">Route</th>
+          <th data-key="distance_km" class="num">Km</th>
+          <th data-key="moving_time" class="num">Time</th>
+          <th data-key="elevation_m" class="num">Elev</th>
+          <th data-key="power_avg_w" class="num power">Watts (avg/max)</th>
+          <th data-key="speed_avg_kmh" class="num speed">km/h (avg/max)</th>
+          <th data-key="heart_rate_avg_bpm" class="num hr">HR (avg/max)</th>
+          <th data-key="cadence_avg" class="num">Cad</th>
+          <th data-key="calories" class="num">Cal</th>
+          <th data-key="relative_effort" class="num">Effort</th>
+        </tr>
+      </thead>
+      <tbody id="rides"></tbody>
+    </table>
+  </div>
 </div>
 
 <script>
-function render(data) {
-  const rides = (data.rides || []).slice().sort((a, b) => a.date.localeCompare(b.date));
+let currentRides = [];
+let sortKey = 'date';
+let sortAsc = true;
 
-  // Totals
+const fmt = (v, unit = '') => (v === null || v === undefined) ? '—' : `${v}${unit}`;
+
+function parseDuration(str) {
+  if (!str) return 0;
+  const parts = str.split(':').map(Number);
+  if (parts.some(isNaN)) return 0;
+  return parts.reduce((acc, p) => acc * 60 + p, 0);
+}
+
+function formatDuration(totalSeconds) {
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.round((totalSeconds % 3600) / 60);
+  if (h === 0) return `${m}m`;
+  return `${h}h ${m}m`;
+}
+
+function renderTotals(rides) {
   const totalDist = rides.reduce((s, r) => s + (r.distance_km || 0), 0);
   const totalCals = rides.reduce((s, r) => s + (r.calories || 0), 0);
   const totalKj = rides.reduce((s, r) => s + (r.total_work_kj || 0), 0);
+  const totalTime = rides.reduce((s, r) => s + parseDuration(r.moving_time), 0);
 
-  const totalsEl = document.getElementById('totals');
-  totalsEl.innerHTML = `
+  document.getElementById('totals').innerHTML = `
     <div class="total-cell"><div class="num">${rides.length}</div><div class="label">RIDES</div></div>
     <div class="total-cell"><div class="num">${totalDist.toFixed(1)}</div><div class="label">TOTAL KM</div></div>
+    <div class="total-cell"><div class="num">${formatDuration(totalTime)}</div><div class="label">TOTAL TIME</div></div>
     <div class="total-cell"><div class="num">${totalCals}</div><div class="label">CALORIES</div></div>
     <div class="total-cell"><div class="num">${totalKj}</div><div class="label">TOTAL WORK (kJ)</div></div>
   `;
+}
 
-  const fmt = (v, unit = '') => (v === null || v === undefined) ? '—' : `${v}${unit}`;
+function renderRows() {
+  const sorted = currentRides.slice().sort((a, b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (av === null || av === undefined) av = sortAsc ? Infinity : -Infinity;
+    if (bv === null || bv === undefined) bv = sortAsc ? Infinity : -Infinity;
+    if (typeof av === 'string') return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+    return sortAsc ? av - bv : bv - av;
+  });
 
-  const ridesEl = document.getElementById('rides');
-  ridesEl.innerHTML = rides.map(r => `
-    <div class="ride">
-      <div class="ride-top">
-        <div class="ride-name">${r.map_name || 'Untitled ride'}</div>
-        <div class="ride-date">${r.date || ''} · ${r.time || ''}</div>
-      </div>
-      <div class="stat-row">
-        <div class="stat"><div class="val">${fmt(r.distance_km, ' km')}</div><div class="sub">DISTANCE</div></div>
-        <div class="stat"><div class="val">${fmt(r.moving_time)}</div><div class="sub">MOVING TIME</div></div>
-        <div class="stat"><div class="val">${fmt(r.elevation_m, ' m')}</div><div class="sub">ELEVATION</div></div>
-        <div class="stat power"><div class="val">${fmt(r.power_avg_w, ' W')} / ${fmt(r.power_max_w, ' W')}</div><div class="sub">AVG / MAX POWER</div></div>
-        <div class="stat speed"><div class="val">${fmt(r.speed_avg_kmh, ' km/h')} / ${fmt(r.speed_max_kmh, ' km/h')}</div><div class="sub">AVG / MAX SPEED</div></div>
-        <div class="stat hr"><div class="val">${fmt(r.heart_rate_avg_bpm, ' bpm')} / ${fmt(r.heart_rate_max_bpm, ' bpm')}</div><div class="sub">AVG / MAX HR</div></div>
-        <div class="stat"><div class="val">${fmt(r.cadence_avg)} / ${fmt(r.cadence_max)}</div><div class="sub">AVG / MAX CADENCE</div></div>
-        <div class="stat"><div class="val">${fmt(r.relative_effort)}</div><div class="sub">RELATIVE EFFORT</div></div>
-      </div>
-    </div>
+  const pair = (a, b) => `${fmt(a)}<span class="pair-max">/${fmt(b)}</span>`;
+
+  document.getElementById('rides').innerHTML = sorted.map(r => `
+    <tr>
+      <td class="muted">${fmt(r.date)}</td>
+      <td class="name" title="${r.map_name || ''}">${r.map_name || '—'}</td>
+      <td class="num">${fmt(r.distance_km)}</td>
+      <td class="num muted">${fmt(r.moving_time)}</td>
+      <td class="num muted">${fmt(r.elevation_m)}</td>
+      <td class="num power">${pair(r.power_avg_w, r.power_max_w)}</td>
+      <td class="num speed">${pair(r.speed_avg_kmh, r.speed_max_kmh)}</td>
+      <td class="num hr">${pair(r.heart_rate_avg_bpm, r.heart_rate_max_bpm)}</td>
+      <td class="num muted">${fmt(r.cadence_avg)}</td>
+      <td class="num muted">${fmt(r.calories)}</td>
+      <td class="num muted">${fmt(r.relative_effort)}</td>
+    </tr>
   `).join('');
 
-  document.getElementById('status').textContent = `Loaded ${rides.length} ride(s) from data.json`;
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.key === sortKey);
+  });
 }
+
+function render(data) {
+  currentRides = data.rides || [];
+  renderTotals(currentRides);
+  renderRows();
+  document.getElementById('status').textContent = `Loaded ${currentRides.length} ride(s) from data.json`;
+}
+
+document.querySelectorAll('thead th').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (sortKey === key) {
+      sortAsc = !sortAsc;
+    } else {
+      sortKey = key;
+      sortAsc = true;
+    }
+    renderRows();
+  });
+});
 
 function showPicker() {
   document.getElementById('picker-wrap').classList.add('show');
