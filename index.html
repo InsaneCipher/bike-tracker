@@ -5,86 +5,99 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ride Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#12161B;
-    --panel:#1A2028;
-    --line:#2B333D;
-    --text:#E9EDF1;
-    --muted:#8A96A3;
-    --power:#C6E86B;
-    --hr:#E88B6B;
-    --speed:#6BB8E8;
+    --bg:#1C1B19;
+    --bg-deep:#141312;
+    --panel:#242220;
+    --line:#3A3733;
+    --text:#EEEAE3;
+    --muted:#9A9186;
+    --power:#E8B93F;
+    --hr:#C1523B;
+    --speed:#4FB6A8;
+    --display:'Oswald', sans-serif;
+    --mono:'IBM Plex Mono', monospace;
   }
   *{box-sizing:border-box;}
   body{
     margin:0;
     min-height:100vh;
     color:var(--text);
-    font-family:'IBM Plex Mono', monospace;
+    font-family:var(--mono);
     padding:48px 24px 80px;
     background-color:var(--bg);
     background-image:
-      radial-gradient(1100px 600px at 12% -10%, rgba(198,232,107,0.06), transparent 60%),
-      radial-gradient(900px 500px at 100% 0%, rgba(107,184,232,0.05), transparent 55%),
-      linear-gradient(180deg, #14191F 0%, #0F1318 100%),
-      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size:auto, auto, auto, 42px 42px, 42px 42px;
-    background-repeat:no-repeat, no-repeat, no-repeat, repeat, repeat;
+      radial-gradient(1000px 560px at 8% -12%, rgba(232,185,63,0.05), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(79,182,168,0.045), transparent 55%),
+      linear-gradient(180deg, #1E1D1B 0%, var(--bg-deep) 100%);
+    background-repeat:no-repeat;
     background-attachment:fixed;
   }
   .wrap{max-width:1200px;margin:0 auto;}
 
   h1{
-    font-family:'Space Grotesk', sans-serif;
+    font-family:var(--display);
     font-weight:700;
-    font-size:2rem;
-    margin:0 0 4px;
-    letter-spacing:-0.01em;
+    font-size:2.4rem;
+    letter-spacing:0.01em;
+    margin:0 0 6px;
   }
-  .subtitle{color:var(--muted);font-size:0.9rem;margin-bottom:36px;}
+  .subtitle{color:var(--muted);font-size:0.92rem;margin-bottom:20px;}
+
+  /* Signature detail: a single checkered finish-line rule */
+  .finish-line{
+    height:9px;
+    background-image: conic-gradient(var(--muted) 90deg, transparent 90deg 180deg, var(--muted) 180deg 270deg, transparent 270deg 360deg);
+    background-size:18px 18px;
+    opacity:0.5;
+    margin-bottom:28px;
+  }
 
   .totals{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:1px;
-    background:var(--line);
+    display:flex;
+    flex-wrap:wrap;
     border:1px solid var(--line);
-    margin-bottom:32px;
+    background:var(--panel);
+    margin-bottom:36px;
   }
   .total-cell{
-    background:var(--panel);
-    padding:20px 16px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);
+    flex:1 1 0;
+    min-width:120px;
+    padding:18px 22px;
+    border-right:1px solid var(--line);
   }
+  .total-cell:last-child{border-right:none;}
   .total-cell .num{
-    font-family:'Space Grotesk', sans-serif;
-    font-size:1.7rem;
-    font-weight:700;
+    font-family:var(--mono);
+    font-size:1.55rem;
+    font-weight:600;
   }
   .total-cell .label{
-    font-size:0.72rem;
+    font-family:var(--display);
+    font-weight:400;
+    font-size:0.8rem;
     color:var(--muted);
-    margin-top:4px;
+    margin-top:3px;
+    letter-spacing:0.01em;
   }
 
   /* Tabs */
   .tabs{
     display:flex;
-    gap:2px;
+    gap:4px;
     border-bottom:1px solid var(--line);
-    margin-bottom:20px;
+    margin-bottom:22px;
   }
   .tab-btn{
     background:none;
     border:none;
     color:var(--muted);
-    font-family:'Space Grotesk', sans-serif;
+    font-family:var(--display);
     font-weight:500;
-    font-size:0.85rem;
-    padding:10px 18px;
+    font-size:0.95rem;
+    padding:10px 16px;
     cursor:pointer;
     border-bottom:2px solid transparent;
     margin-bottom:-1px;
@@ -98,27 +111,27 @@
   .table-wrap{
     border:1px solid var(--line);
     overflow-x:auto;
-    box-shadow:0 20px 40px -20px rgba(0,0,0,0.5);
   }
   table{
     width:100%;
     min-width:1200px;
     table-layout:fixed;
     border-collapse:collapse;
-    font-size:0.72rem;
+    font-size:0.74rem;
     white-space:nowrap;
   }
-  col.name{width:20%;}
-  col.date{width:9%;}
+  col.idx{width:3.5%;}
+  col.name{width:18%;}
+  col.date{width:8%;}
   col.sm{width:6%;}
   col.pair{width:11%;}
   thead th{
     text-align:left;
+    font-family:var(--display);
     font-weight:500;
     color:var(--muted);
-    font-size:0.62rem;
-    letter-spacing:0.02em;
-    padding:5px 8px;
+    font-size:0.72rem;
+    padding:8px 10px;
     background:var(--panel);
     border-bottom:1px solid var(--line);
     position:sticky;
@@ -129,16 +142,19 @@
   thead th:hover{color:var(--text);}
   thead th.sorted{color:var(--power);}
   tbody td{
-    padding:3px 8px;
+    padding:6px 10px;
     border-bottom:1px solid var(--line);
     line-height:1.5;
     overflow:hidden;
     text-overflow:ellipsis;
   }
-  tbody tr:hover{background:var(--panel);}
+  tbody tr:nth-child(even){background:rgba(255,255,255,0.015);}
+  tbody tr:hover{background:rgba(232,185,63,0.05);}
   tbody tr:last-child td{border-bottom:none;}
+  td.idx{color:var(--muted);}
   td.name{
-    font-family:'Space Grotesk', sans-serif;
+    font-family:var(--display);
+    font-weight:400;
     overflow:hidden;
     text-overflow:ellipsis;
   }
@@ -154,43 +170,43 @@
     display:flex;
     flex-wrap:wrap;
     gap:6px;
-    margin-bottom:20px;
+    margin-bottom:22px;
   }
   .metric-btn{
     background:var(--panel);
     border:1px solid var(--line);
     color:var(--muted);
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.72rem;
-    padding:6px 12px;
+    font-family:var(--display);
+    font-weight:500;
+    font-size:0.82rem;
+    padding:6px 14px;
     cursor:pointer;
   }
-  .metric-btn:hover{color:var(--text);border-color:#3a4552;}
-  .metric-btn.active{color:var(--bg);font-weight:600;}
+  .metric-btn:hover{color:var(--text);border-color:#4a4540;}
+  .metric-btn.active{font-weight:600;}
 
   .chart-wrap{
     border:1px solid var(--line);
     background:var(--panel);
-    padding:20px;
-    box-shadow:0 20px 40px -20px rgba(0,0,0,0.5);
+    padding:22px;
     position:relative;
   }
   .chart-wrap svg{display:block;width:100%;height:auto;}
-  .chart-empty{color:var(--muted);font-size:0.85rem;text-align:center;padding:60px 0;}
+  .chart-empty{color:var(--muted);font-size:0.9rem;text-align:center;padding:60px 0;font-family:var(--display);}
 
   #tooltip{
     position:absolute;
     display:none;
-    background:#0F1318;
+    background:var(--bg-deep);
     border:1px solid var(--line);
     padding:6px 10px;
-    font-size:0.7rem;
+    font-size:0.72rem;
     pointer-events:none;
     white-space:nowrap;
     z-index:10;
   }
   #tooltip .t-date{color:var(--muted);}
-  #tooltip .t-val{font-family:'Space Grotesk', sans-serif;font-weight:700;}
+  #tooltip .t-val{font-family:var(--mono);font-weight:700;}
 
   #picker-wrap{
     display:none;
@@ -204,22 +220,38 @@
   #picker-wrap.show{display:block;}
   #picker-wrap button{
     background:var(--power);
-    color:#12161B;
+    color:var(--bg-deep);
     border:none;
     padding:8px 18px;
-    font-family:'IBM Plex Mono', monospace;
+    font-family:var(--display);
     font-weight:600;
-    font-size:0.8rem;
+    font-size:0.85rem;
     cursor:pointer;
     margin-top:10px;
   }
-  #status{color:var(--muted);font-size:0.8rem;margin-bottom:20px;}
+  #status{color:var(--muted);font-size:0.82rem;margin-bottom:22px;}
+
+  @media (max-width: 640px){
+    body{padding:28px 14px 60px;}
+    h1{font-size:1.7rem;}
+    .subtitle{margin-bottom:16px;}
+    .finish-line{margin-bottom:20px;}
+    .totals{margin-bottom:24px;}
+    .total-cell{flex:1 1 45%;border-right:none;border-bottom:1px solid var(--line);padding:14px 16px;}
+    .total-cell .num{font-size:1.3rem;}
+    .total-cell .label{font-size:0.72rem;}
+    .tabs{margin-bottom:16px;}
+    .tab-btn{padding:8px 12px;font-size:0.85rem;}
+    .metric-btn{padding:5px 11px;font-size:0.76rem;}
+    .chart-wrap{padding:12px;}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Ride Log</h1>
   <div class="subtitle">Virtual rides — MyWhoosh</div>
+  <div class="finish-line"></div>
 
   <div id="status"></div>
 
@@ -241,6 +273,7 @@
     <div class="table-wrap">
       <table id="ride-table">
         <colgroup>
+          <col class="idx">
           <col class="date">
           <col class="name">
           <col class="sm">
@@ -255,6 +288,7 @@
         </colgroup>
         <thead>
           <tr>
+            <th class="idx">#</th>
             <th data-key="date">Date</th>
             <th data-key="map_name">Route</th>
             <th data-key="distance_km" class="num">Km</th>
@@ -311,11 +345,11 @@ function renderTotals(rides) {
   const totalTime = rides.reduce((s, r) => s + parseDuration(r.moving_time), 0);
 
   document.getElementById('totals').innerHTML = `
-    <div class="total-cell"><div class="num">${rides.length}</div><div class="label">RIDES</div></div>
-    <div class="total-cell"><div class="num">${totalDist.toFixed(1)}</div><div class="label">TOTAL KM</div></div>
-    <div class="total-cell"><div class="num">${formatDuration(totalTime)}</div><div class="label">TOTAL TIME</div></div>
-    <div class="total-cell"><div class="num">${totalCals}</div><div class="label">CALORIES</div></div>
-    <div class="total-cell"><div class="num">${totalKj}</div><div class="label">TOTAL WORK (kJ)</div></div>
+    <div class="total-cell"><div class="num">${rides.length}</div><div class="label">Rides logged</div></div>
+    <div class="total-cell"><div class="num">${totalDist.toFixed(1)}</div><div class="label">Total distance (km)</div></div>
+    <div class="total-cell"><div class="num">${formatDuration(totalTime)}</div><div class="label">Time in the saddle</div></div>
+    <div class="total-cell"><div class="num">${totalCals}</div><div class="label">Calories burned</div></div>
+    <div class="total-cell"><div class="num">${totalKj}</div><div class="label">Total work (kJ)</div></div>
   `;
 }
 
@@ -330,8 +364,9 @@ function renderRows() {
 
   const pair = (a, b) => `${fmt(a)}<span class="pair-max">/${fmt(b)}</span>`;
 
-  document.getElementById('rides').innerHTML = sorted.map(r => `
+  document.getElementById('rides').innerHTML = sorted.map((r, i) => `
     <tr>
+      <td class="idx">${i + 1}</td>
       <td class="muted">${fmt(r.date)}</td>
       <td class="name" title="${r.map_name || ''}">${r.map_name || '—'}</td>
       <td class="num">${fmt(r.distance_km)}</td>
@@ -346,7 +381,7 @@ function renderRows() {
     </tr>
   `).join('');
 
-  document.querySelectorAll('thead th').forEach(th => {
+  document.querySelectorAll('thead th[data-key]').forEach(th => {
     th.classList.toggle('sorted', th.dataset.key === sortKey);
   });
 }
@@ -364,15 +399,15 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 /* ---------------- Graphs ---------------- */
 const METRICS = [
-  { id: 'power',     label: 'Power',     unit: 'W',     color: '--power', get: r => r.power_avg_w },
-  { id: 'speed',     label: 'Speed',     unit: 'km/h',  color: '--speed', get: r => r.speed_avg_kmh },
-  { id: 'hr',        label: 'Heart Rate',unit: 'bpm',   color: '--hr',    get: r => r.heart_rate_avg_bpm },
-  { id: 'distance',  label: 'Distance',  unit: 'km',    color: '--text',  get: r => r.distance_km },
-  { id: 'time',      label: 'Time',      unit: 'min',   color: '--text',  get: r => Math.round(parseDuration(r.moving_time) / 60) },
-  { id: 'elevation', label: 'Elevation', unit: 'm',     color: '--text',  get: r => r.elevation_m },
-  { id: 'cadence',   label: 'Cadence',   unit: 'rpm',   color: '--text',  get: r => r.cadence_avg },
-  { id: 'calories',  label: 'Calories',  unit: 'kcal',  color: '--text',  get: r => r.calories },
-  { id: 'effort',    label: 'Effort',    unit: '',      color: '--text',  get: r => r.relative_effort },
+  { id: 'power',     label: 'Power',      unit: 'W',     color: '--power', get: r => r.power_avg_w },
+  { id: 'speed',     label: 'Speed',      unit: 'km/h',  color: '--speed', get: r => r.speed_avg_kmh },
+  { id: 'hr',        label: 'Heart rate', unit: 'bpm',   color: '--hr',    get: r => r.heart_rate_avg_bpm },
+  { id: 'distance',  label: 'Distance',   unit: 'km',    color: '--text',  get: r => r.distance_km },
+  { id: 'time',      label: 'Time',       unit: 'min',   color: '--text',  get: r => Math.round(parseDuration(r.moving_time) / 60) },
+  { id: 'elevation', label: 'Elevation',  unit: 'm',     color: '--text',  get: r => r.elevation_m },
+  { id: 'cadence',   label: 'Cadence',    unit: 'rpm',   color: '--text',  get: r => r.cadence_avg },
+  { id: 'calories',  label: 'Calories',   unit: 'kcal',  color: '--text',  get: r => r.calories },
+  { id: 'effort',    label: 'Effort',     unit: '',      color: '--text',  get: r => r.relative_effort },
 ];
 
 function cssVar(name) {
@@ -446,12 +481,10 @@ function drawChart() {
   const areaPoints = `${xScale(points[0].date.getTime())},${padT + plotH} ` + linePoints +
     ` ${xScale(points[points.length - 1].date.getTime())},${padT + plotH}`;
 
-  // y-axis ticks
   const tickCount = 4;
   let yTicks = [];
   for (let i = 0; i <= tickCount; i++) yTicks.push(yMin + (i * (yMax - yMin) / tickCount));
 
-  // x-axis ticks (thin out if many points)
   const maxXTicks = 7;
   const step = Math.max(1, Math.ceil(points.length / maxXTicks));
   const spansMultipleYears = points[0].date.getFullYear() !== points[points.length - 1].date.getFullYear();
@@ -485,7 +518,7 @@ function drawChart() {
 
   const tooltip = document.getElementById('tooltip');
   container.querySelectorAll('.pt').forEach(circle => {
-    circle.addEventListener('mouseenter', (e) => {
+    circle.addEventListener('mouseenter', () => {
       const p = points[+circle.dataset.i];
       tooltip.innerHTML = `<span class="t-date">${p.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span><br><span class="t-val">${p.value}${metric.unit ? ' ' + metric.unit : ''}</span>`;
       tooltip.style.display = 'block';
@@ -508,7 +541,7 @@ function render(data) {
   document.getElementById('status').textContent = `Loaded ${currentRides.length} ride(s) from data.json`;
 }
 
-document.querySelectorAll('thead th').forEach(th => {
+document.querySelectorAll('thead th[data-key]').forEach(th => {
   th.addEventListener('click', () => {
     const key = th.dataset.key;
     if (sortKey === key) {
