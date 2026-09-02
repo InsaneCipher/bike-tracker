@@ -97,6 +97,31 @@
       "calories": 295,
       "ftp": 150,
       "elapsed_time": "44:36"
+    },
+    {
+      "date": "2026-09-02",
+      "time": "09:54",
+      "map_name": "Bike Ride - The Muur (Belgium)",
+      "distance_km": 11.93,
+      "moving_time": "41:45",
+      "elevation_m": 139,
+      "relative_effort": null,
+      "weighted_avg_power_w": 109,
+      "total_work_kj": 269,
+      "training_load": 36,
+      "intensity_pct": 73,
+      "speed_avg_kmh": 17.1,
+      "speed_max_kmh": 77.4,
+      "heart_rate_avg_bpm": 152,
+      "heart_rate_max_bpm": 166,
+      "cadence_avg": 57,
+      "cadence_max": 79,
+      "power_avg_w": 107,
+      "power_max_w": 220,
+      "calories": 268,
+      "elapsed_time": "41:45",
+      "ftp": 150
     }
+
   ]
 }
