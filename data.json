@@ -121,7 +121,30 @@
       "calories": 268,
       "elapsed_time": "41:45",
       "ftp": 150
+    },
+    {
+      "date": "2026-09-04",
+      "time": "23:02",
+      "map_name": "Old Town Sprint (Switzerland)",
+      "distance_km": 6.10,
+      "moving_time": "15:30",
+      "elevation_m": 14,
+      "relative_effort": 22,
+      "weighted_avg_power_w": 114,
+      "total_work_kj": 105,
+      "training_load": 14,
+      "intensity_pct": 76,
+      "speed_avg_kmh": 23.6,
+      "speed_max_kmh": 43.8,
+      "heart_rate_avg_bpm": 156,
+      "heart_rate_max_bpm": 185,
+      "cadence_avg": 59,
+      "cadence_max": 80,
+      "power_avg_w": 113,
+      "power_max_w": 223,
+      "calories": 105,
+      "elapsed_time": "15:30",
+      "ftp": 150
     }
-
   ]
 }
