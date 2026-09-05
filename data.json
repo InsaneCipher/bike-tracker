@@ -145,6 +145,30 @@
       "calories": 105,
       "elapsed_time": "15:30",
       "ftp": 150
+    },
+    {
+      "date": "2026-09-05",
+      "time": "12:50",
+      "map_name": "Capital Circuit (Switzerland)",
+      "distance_km": 11.95,
+      "moving_time": "31:08",
+      "elevation_m": 68,
+      "relative_effort": 60,
+      "weighted_avg_power_w": 127,
+      "total_work_kj": 234,
+      "training_load": 37,
+      "intensity_pct": 85,
+      "speed_avg_kmh": 23.0,
+      "speed_max_kmh": 49.9,
+      "heart_rate_avg_bpm": 164,
+      "heart_rate_max_bpm": 188,
+      "cadence_avg": 61,
+      "cadence_max": 87,
+      "power_avg_w": 125,
+      "power_max_w": 248,
+      "calories": 233,
+      "elapsed_time": "31:08",
+      "ftp": 150
     }
   ]
 }
