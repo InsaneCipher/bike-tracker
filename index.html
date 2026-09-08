@@ -18,6 +18,7 @@
     --power:#E8B93F;
     --hr:#C1523B;
     --speed:#4FB6A8;
+    --best:#49fc03;
     --display:'Oswald', sans-serif;
     --mono:'IBM Plex Mono', monospace;
   }
@@ -113,19 +114,19 @@
     border:1px solid var(--line);
     overflow-x:auto;
   }
-  table{
+    table{
     width:100%;
-    min-width:1190px;
+    min-width:1130px;
     table-layout:fixed;
     border-collapse:collapse;
     font-size:0.74rem;
     white-space:nowrap;
   }
-  col.idx{width:3.5%;}
+  col.idx{width:3%;}
   col.name{width:16%;}
-  col.date{width:9%;}
+  col.date{width:12%;}
   col.sm{width:6%;}
-  col.pair{width:11%;}
+  col.pair{width:8%;}
   thead th{
     text-align:left;
     font-family:var(--display);
@@ -145,7 +146,7 @@
   tbody td{
     padding:6px 10px;
     border-bottom:1px solid var(--line);
-    line-height:1.5;
+    line-height:1.4;
     overflow:hidden;
     text-overflow:ellipsis;
   }
@@ -153,6 +154,11 @@
   tbody tr:hover{background:rgba(232,185,63,0.05);}
   tbody tr:last-child td{border-bottom:none;}
   td.idx{color:var(--muted);}
+  td.date-cell .ride-time{
+    color:var(--muted);
+    font-size:0.85em;
+    margin-left:6px;
+  }
   td.name{
     font-family:var(--display);
     font-weight:400;
@@ -165,6 +171,9 @@
   td.speed{color:var(--speed);}
   td.muted{color:var(--muted);}
   .pair-max{color:var(--muted);font-size:0.9em;}
+  .best-val{
+    color:var(--best);
+  }
 
   /* Graph view */
   .metric-picker{
@@ -358,7 +367,28 @@ function renderTotals(rides) {
   `;
 }
 
+function computeBestValues(rides) {
+  const maxFields = ['distance_km', 'elevation_m', 'power_avg_w', 'power_max_w', 'ftp', 'speed_avg_kmh', 'speed_max_kmh', 'cadence_avg', 'calories', 'relative_effort'];
+  const best = {};
+  maxFields.forEach(f => {
+    const vals = rides.map(r => r[f]).filter(v => v !== null && v !== undefined && !isNaN(v));
+    best[f] = vals.length ? Math.max(...vals) : null;
+  });
+  const times = rides.map(r => parseDuration(r.moving_time)).filter(v => v > 0);
+  best.moving_time_seconds = times.length ? Math.max(...times) : null;
+  return best;
+}
+
+function isBest(best, field, value) {
+  if (value === null || value === undefined) return false;
+  const b = best[field];
+  if (b === null || b === undefined) return false;
+  return value === b;
+}
+
 function renderRows() {
+  const best = computeBestValues(currentRides);
+
   const sorted = currentRides.slice().sort((a, b) => {
     let av = a[sortKey], bv = b[sortKey];
     if (av === null || av === undefined) av = sortAsc ? Infinity : -Infinity;
@@ -367,23 +397,28 @@ function renderRows() {
     return sortAsc ? av - bv : bv - av;
   });
 
-  const pair = (a, b) => `${fmt(a)}<span class="pair-max">/${fmt(b)}</span>`;
+  const val = (value, unit, highlight) => {
+    const text = fmt(value, unit);
+    return highlight ? `<span class="best-val">${text}</span>` : text;
+  };
+
+  const pair = (a, b, highlightA, highlightB) => `${val(a, '', highlightA)}<span class="pair-max${highlightB ? ' best-val' : ''}">/${fmt(b)}</span>`;
 
   document.getElementById('rides').innerHTML = sorted.map((r, i) => `
     <tr>
       <td class="idx">${i + 1}</td>
-      <td class="muted">${fmt(r.date)}</td>
+      <td class="muted date-cell">${fmt(r.date)}${r.time ? `<span class="ride-time">${r.time}</span>` : ''}</td>
       <td class="name" title="${r.map_name || ''}">${r.map_name || '—'}</td>
-      <td class="num">${fmt(r.distance_km)}</td>
-      <td class="num muted">${fmt(r.moving_time)}</td>
-      <td class="num muted">${fmt(r.elevation_m)}</td>
-      <td class="num power">${pair(r.power_avg_w, r.power_max_w)}</td>
-      <td class="num power">${fmt(r.ftp, ' W')}</td>
-      <td class="num speed">${pair(r.speed_avg_kmh, r.speed_max_kmh)}</td>
-      <td class="num hr">${pair(r.heart_rate_avg_bpm, r.heart_rate_max_bpm)}</td>
-      <td class="num muted">${fmt(r.cadence_avg)}</td>
-      <td class="num muted">${fmt(r.calories)}</td>
-      <td class="num muted">${fmt(r.relative_effort)}</td>
+      <td class="num">${val(r.distance_km, '', isBest(best, 'distance_km', r.distance_km))}</td>
+      <td class="num muted">${val(r.moving_time, '', isBest(best, 'moving_time_seconds', parseDuration(r.moving_time)))}</td>
+      <td class="num muted">${val(r.elevation_m, '', isBest(best, 'elevation_m', r.elevation_m))}</td>
+      <td class="num power">${pair(r.power_avg_w, r.power_max_w, isBest(best, 'power_avg_w', r.power_avg_w), isBest(best, 'power_max_w', r.power_max_w))}</td>
+      <td class="num power">${val(r.ftp, ' W', isBest(best, 'ftp', r.ftp))}</td>
+      <td class="num speed">${pair(r.speed_avg_kmh, r.speed_max_kmh, isBest(best, 'speed_avg_kmh', r.speed_avg_kmh), isBest(best, 'speed_max_kmh', r.speed_max_kmh))}</td>
+      <td class="num hr">${pair(r.heart_rate_avg_bpm, r.heart_rate_max_bpm, isBest(best, 'heart_rate_avg_bpm', r.heart_rate_avg_bpm))}</td>
+      <td class="num muted">${val(r.cadence_avg, '', isBest(best, 'cadence_avg', r.cadence_avg))}</td>
+      <td class="num muted">${val(r.calories, '', isBest(best, 'calories', r.calories))}</td>
+      <td class="num muted">${val(r.relative_effort, '', isBest(best, 'relative_effort', r.relative_effort))}</td>
     </tr>
   `).join('');
 
