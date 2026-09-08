@@ -193,6 +193,30 @@
       "calories": 387,
       "elapsed_time": "54:12",
       "ftp": 150
-    }
+    },
+    {
+      "date": "2026-09-08",
+      "time": "17:25",
+      "map_name": "Bruges (Belgium)",
+      "distance_km": 10.64,
+      "moving_time": "24:34",
+      "elevation_m": 0,
+      "relative_effort": 37,
+      "weighted_avg_power_w": 126,
+      "total_work_kj": 181,
+      "training_load": 28,
+      "intensity_pct": 84,
+      "speed_avg_kmh": 26.0,
+      "speed_max_kmh": 33.5,
+      "heart_rate_avg_bpm": 158,
+      "heart_rate_max_bpm": 182,
+      "cadence_avg": 61,
+      "cadence_max": 80,
+      "power_avg_w": 123,
+      "power_max_w": 235,
+      "calories": 180,
+      "elapsed_time": "24:34",
+      "ftp": 150
+  }
   ]
 }
