@@ -217,6 +217,30 @@
       "calories": 180,
       "elapsed_time": "24:34",
       "ftp": 150
+  },
+  {
+      "date": "2026-09-10",
+      "time": "18:15",
+      "map_name": "King's Way (Arabia)",
+      "distance_km": 13.81,
+      "moving_time": "33:42",
+      "elevation_m": 52,
+      "relative_effort": 55,
+      "weighted_avg_power_w": 126,
+      "total_work_kj": 252,
+      "training_load": 39,
+      "intensity_pct": 84,
+      "speed_avg_kmh": 24.6,
+      "speed_max_kmh": 46.2,
+      "heart_rate_avg_bpm": 160,
+      "heart_rate_max_bpm": 182,
+      "cadence_avg": 60,
+      "cadence_max": 94,
+      "power_avg_w": 124,
+      "power_max_w": 292,
+      "calories": 251,
+      "elapsed_time": "33:42",
+      "ftp": 150
   }
   ]
 }
