@@ -241,6 +241,30 @@
       "calories": 251,
       "elapsed_time": "33:42",
       "ftp": 150
+  },
+  {
+      "date": "2026-09-12",
+      "time": "16:03",
+      "map_name": "Heart of Switzerland (Switzerland)",
+      "distance_km": 25.69,
+      "moving_time": "1:03:31",
+      "elevation_m": 118,
+      "relative_effort": 112,
+      "weighted_avg_power_w": 130,
+      "total_work_kj": 487,
+      "training_load": 79,
+      "intensity_pct": 87,
+      "speed_avg_kmh": 24.3,
+      "speed_max_kmh": 54.7,
+      "heart_rate_avg_bpm": 161,
+      "heart_rate_max_bpm": 182,
+      "cadence_avg": 63,
+      "cadence_max": 105,
+      "power_avg_w": 128,
+      "power_max_w": 324,
+      "calories": 486,
+      "elapsed_time": "1:03:31",
+      "ftp": 150
   }
   ]
 }
