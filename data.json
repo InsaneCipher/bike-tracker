@@ -24,7 +24,16 @@
       "power_max_w": 179,
       "calories": 203,
       "ftp": 160,
-      "elapsed_time": "35:34"
+      "elapsed_time": "35:34",
+      "zones": {
+        "recovery_sec": 218,
+        "endurance_sec": 1717,
+        "tempo_sec": 181,
+        "threshold_sec": 14,
+        "vo2max_sec": 5,
+        "anaerobic_sec": 0,
+        "neuromuscular_sec": 0
+      }
     },
     {
       "date": "2026-08-30",
@@ -48,7 +57,16 @@
       "power_max_w": 248,
       "calories": 166,
       "ftp": 150,
-      "elapsed_time": "27:32"
+      "elapsed_time": "27:32",
+      "zones": {
+        "recovery_sec": 100,
+        "endurance_sec": 1244,
+        "tempo_sec": 271,
+        "threshold_sec": 6,
+        "vo2max_sec": 9,
+        "anaerobic_sec": 5,
+        "neuromuscular_sec": 18
+      }
     },
     {
       "date": "2026-08-31",
@@ -72,7 +90,16 @@
       "power_max_w": 216,
       "calories": 322,
       "ftp": 150,
-      "elapsed_time": "50:54"
+      "elapsed_time": "50:54",
+      "zones": {
+        "recovery_sec": 128,
+        "endurance_sec": 2182,
+        "tempo_sec": 496,
+        "threshold_sec": 185,
+        "vo2max_sec": 36,
+        "anaerobic_sec": 28,
+        "neuromuscular_sec": 0
+      }
     },
     {
       "date": "2026-09-01",
@@ -96,7 +123,16 @@
       "power_max_w": 260,
       "calories": 295,
       "ftp": 150,
-      "elapsed_time": "44:36"
+      "elapsed_time": "44:36",
+      "zones": {
+        "recovery_sec": 140,
+        "endurance_sec": 1712,
+        "tempo_sec": 496,
+        "threshold_sec": 213,
+        "vo2max_sec": 57,
+        "anaerobic_sec": 28,
+        "neuromuscular_sec": 31
+      }
     },
     {
       "date": "2026-09-02",
@@ -120,7 +156,16 @@
       "power_max_w": 220,
       "calories": 268,
       "elapsed_time": "41:45",
-      "ftp": 150
+      "ftp": 150,
+      "zones": {
+        "recovery_sec": 97,
+        "endurance_sec": 1748,
+        "tempo_sec": 542,
+        "threshold_sec": 42,
+        "vo2max_sec": 48,
+        "anaerobic_sec": 29,
+        "neuromuscular_sec": 0
+      }
     },
     {
       "date": "2026-09-04",
@@ -144,7 +189,16 @@
       "power_max_w": 223,
       "calories": 105,
       "elapsed_time": "15:30",
-      "ftp": 150
+      "ftp": 150,
+      "zones": {
+        "recovery_sec": 20,
+        "endurance_sec": 613,
+        "tempo_sec": 200,
+        "threshold_sec": 53,
+        "vo2max_sec": 33,
+        "anaerobic_sec": 12,
+        "neuromuscular_sec": 0
+      }
     },
     {
       "date": "2026-09-05",
@@ -168,7 +222,16 @@
       "power_max_w": 248,
       "calories": 233,
       "elapsed_time": "31:08",
-      "ftp": 150
+      "ftp": 150,
+      "zones": {
+        "recovery_sec": 21,
+        "endurance_sec": 441,
+        "tempo_sec": 1087,
+        "threshold_sec": 241,
+        "vo2max_sec": 26,
+        "anaerobic_sec": 41,
+        "neuromuscular_sec": 12
+      }
     },
     {
       "date": "2026-09-06",
@@ -192,7 +255,16 @@
       "power_max_w": 237,
       "calories": 387,
       "elapsed_time": "54:12",
-      "ftp": 150
+      "ftp": 150,
+      "zones": {
+        "recovery_sec": 118,
+        "endurance_sec": 928,
+        "tempo_sec": 1803,
+        "threshold_sec": 260,
+        "vo2max_sec": 42,
+        "anaerobic_sec": 92,
+        "neuromuscular_sec": 10
+      }
     },
     {
       "date": "2026-09-08",
@@ -216,9 +288,18 @@
       "power_max_w": 235,
       "calories": 180,
       "elapsed_time": "24:34",
-      "ftp": 150
-  },
-  {
+      "ftp": 150,
+      "zones": {
+        "recovery_sec": 51,
+        "endurance_sec": 323,
+        "tempo_sec": 950,
+        "threshold_sec": 29,
+        "vo2max_sec": 48,
+        "anaerobic_sec": 68,
+        "neuromuscular_sec": 6
+      }
+    },
+    {
       "date": "2026-09-10",
       "time": "18:15",
       "map_name": "King's Way (Arabia)",
@@ -240,9 +321,18 @@
       "power_max_w": 292,
       "calories": 251,
       "elapsed_time": "33:42",
-      "ftp": 150
-  },
-  {
+      "ftp": 150,
+      "zones": {
+        "recovery_sec": 25,
+        "endurance_sec": 511,
+        "tempo_sec": 1171,
+        "threshold_sec": 205,
+        "vo2max_sec": 43,
+        "anaerobic_sec": 56,
+        "neuromuscular_sec": 12
+      }
+    },
+    {
       "date": "2026-09-12",
       "time": "16:03",
       "map_name": "Heart of Switzerland (Switzerland)",
@@ -264,7 +354,16 @@
       "power_max_w": 324,
       "calories": 486,
       "elapsed_time": "1:03:31",
-      "ftp": 150
-  }
+      "ftp": 150,
+      "zones": {
+        "recovery_sec": 111,
+        "endurance_sec": 412,
+        "tempo_sec": 2076,
+        "threshold_sec": 997,
+        "vo2max_sec": 158,
+        "anaerobic_sec": 47,
+        "neuromuscular_sec": 11
+      }
+    }
   ]
 }

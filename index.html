@@ -127,6 +127,7 @@
   col.date{width:12%;}
   col.sm{width:6%;}
   col.pair{width:8%;}
+  col.zonecol{width:6%;}
   thead th{
     text-align:left;
     font-family:var(--display);
@@ -255,6 +256,110 @@
     .metric-btn{padding:5px 11px;font-size:0.76rem;}
     .chart-wrap{padding:12px;}
   }
+
+  /* ===== New: Records view ===== */
+  .section-title{
+    font-family:var(--display);
+    font-weight:500;
+    font-size:1.05rem;
+    color:var(--text);
+    margin:36px 0 14px;
+  }
+  .section-title:first-child{margin-top:0;}
+  .records-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .record-card{
+    background:var(--panel);
+    padding:16px 18px;
+    min-width:0;
+    overflow:hidden;
+  }
+  .record-value{
+    font-family:var(--mono);
+    font-size:1.3rem;
+    font-weight:600;
+    color:var(--best);
+  }
+  .record-label{
+    font-family:var(--display);
+    font-size:0.78rem;
+    color:var(--text);
+    margin-top:4px;
+  }
+  .record-meta{
+    font-size:0.68rem;
+    color:var(--muted);
+    margin-top:4px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    position:relative;
+  }
+  .record-meta-track{
+    display:inline-block;
+  }
+  .record-meta.scrolling{text-overflow:clip;}
+  .record-meta.scrolling .record-meta-track{
+    animation:marquee-scroll linear infinite;
+  }
+  @keyframes marquee-scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  .zone-bar{
+    display:flex;
+    height:26px;
+    border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .zone-seg{height:100%;}
+  .mini-zone-bar{
+    display:flex;
+    height:14px;
+    width:100%;
+    border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .mini-zone-seg{height:100%;}
+  .zone-legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:12px;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+  .zone-legend-item{display:flex;align-items:center;gap:6px;}
+  .zone-dot{
+    width:9px;
+    height:9px;
+    display:inline-block;
+  }
+
+  /* ===== New: Trends view ===== */
+  .simple-table{
+    table-layout:auto !important;
+    min-width:auto !important;
+    white-space:normal !important;
+  }
+  .simple-table th, .simple-table td{
+    white-space:nowrap;
+  }
+
+  /* Mobile overrides for Records view — placed after the rules above on purpose,
+     so they win the cascade at narrow widths instead of being overridden by them. */
+  @media (max-width: 640px){
+    .records-grid{grid-template-columns:repeat(2, 1fr);}
+    .record-card{padding:12px 14px;}
+    .record-value{font-size:1rem;}
+    .record-label{font-size:0.68rem;}
+    .record-meta{font-size:0.6rem;}
+  }
 </style>
 </head>
 <body>
@@ -277,6 +382,8 @@
   <div class="tabs">
     <button class="tab-btn active" data-view="table-view">Table</button>
     <button class="tab-btn" data-view="graph-view">Graphs</button>
+    <button class="tab-btn" data-view="records-view">Records</button>
+    <button class="tab-btn" data-view="trends-view">Trends</button>
   </div>
 
   <div id="table-view" class="view active">
@@ -296,6 +403,7 @@
           <col class="sm">
           <col class="sm">
           <col class="sm">
+          <col class="zonecol">
         </colgroup>
         <thead>
           <tr>
@@ -312,6 +420,7 @@
             <th data-key="cadence_avg" class="num">Cad</th>
             <th data-key="calories" class="num">Cal</th>
             <th data-key="relative_effort" class="num">Effort</th>
+            <th>Zones</th>
           </tr>
         </thead>
         <tbody id="rides"></tbody>
@@ -324,6 +433,46 @@
     <div class="chart-wrap">
       <div id="chart-container"></div>
       <div id="tooltip"></div>
+    </div>
+  </div>
+
+  <div id="records-view" class="view">
+    <div class="section-title">Personal records</div>
+    <div class="records-grid" id="records-grid"></div>
+
+    <div class="section-title">Training zones</div>
+    <div id="zones-chart"></div>
+  </div>
+
+  <div id="trends-view" class="view">
+    <div class="section-title">Weekly totals</div>
+    <div class="table-wrap">
+      <table class="simple-table">
+        <thead>
+          <tr>
+            <th>Week of</th>
+            <th class="num">Rides</th>
+            <th class="num">Km</th>
+            <th class="num">Time</th>
+          </tr>
+        </thead>
+        <tbody id="weekly-body"></tbody>
+      </table>
+    </div>
+
+    <div class="section-title">By route</div>
+    <div class="table-wrap">
+      <table class="simple-table">
+        <thead>
+          <tr>
+            <th>Route</th>
+            <th class="num">Times ridden</th>
+            <th class="num">Best avg speed</th>
+            <th>Last ridden</th>
+          </tr>
+        </thead>
+        <tbody id="route-body"></tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -386,6 +535,34 @@ function isBest(best, field, value) {
   return value === b;
 }
 
+// Hand-picked colors rather than a computed gradient — each zone is a genuinely different
+// hue so adjacent zones stay visually distinct even at small sizes, instead of blurring
+// together the way a smooth interpolation tends to. The top zone matches --hr exactly.
+const ZONE_DEFS = [
+  { key: 'recovery_sec',      name: 'Recovery',      color: '#9A9186' }, // muted grey (--muted)
+  { key: 'endurance_sec',     name: 'Endurance',     color: '#ffaa80' }, // teal (--speed)
+  { key: 'tempo_sec',         name: 'Tempo',         color: '#E8834A' }, // yellow (--power)
+  { key: 'threshold_sec',     name: 'Threshold',     color: '#B5451F' }, // orange
+  { key: 'vo2max_sec',        name: 'VO2 max',       color: '#C1523B' }, // deep orange-red
+  { key: 'anaerobic_sec',     name: 'Anaerobic',     color: '#ff3333' }, // purple
+  { key: 'neuromuscular_sec', name: 'Neuromuscular', color: '#e60000' }, // matches --hr (avg heart rate)
+];
+
+function zoneColor(c) {
+  return c;
+}
+
+function miniZoneBar(zones) {
+  if (!zones) return '<span class="muted">—</span>';
+  const total = ZONE_DEFS.reduce((s, z) => s + (zones[z.key] || 0), 0);
+  if (!total) return '<span class="muted">—</span>';
+  const segs = ZONE_DEFS
+    .filter(z => zones[z.key] > 0)
+    .map(z => `<div class="mini-zone-seg" style="width:${(zones[z.key] / total) * 100}%;background:${zoneColor(z.color)}" title="${z.name}: ${formatDuration(zones[z.key])}"></div>`)
+    .join('');
+  return `<div class="mini-zone-bar">${segs}</div>`;
+}
+
 function renderRows() {
   const best = computeBestValues(currentRides);
 
@@ -419,6 +596,7 @@ function renderRows() {
       <td class="num muted">${val(r.cadence_avg, '', isBest(best, 'cadence_avg', r.cadence_avg))}</td>
       <td class="num muted">${val(r.calories, '', isBest(best, 'calories', r.calories))}</td>
       <td class="num muted">${val(r.relative_effort, '', isBest(best, 'relative_effort', r.relative_effort))}</td>
+      <td class="zones-cell">${miniZoneBar(r.zones)}</td>
     </tr>
   `).join('');
 
@@ -435,6 +613,8 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.add('active');
     document.getElementById(btn.dataset.view).classList.add('active');
     if (btn.dataset.view === 'graph-view') drawChart();
+    if (btn.dataset.view === 'records-view') { renderRecords(currentRides); renderZones(currentRides); }
+    if (btn.dataset.view === 'trends-view') { renderWeekly(currentRides); renderRouteHistory(currentRides); }
   });
 });
 
@@ -574,12 +754,184 @@ function drawChart() {
   });
 }
 
+/* ---------------- New: Records view ---------------- */
+function computeRecords(rides) {
+  const specs = [
+    { field: 'distance_km',     label: 'Longest ride',        unit: ' km' },
+    { field: 'elevation_m',     label: 'Most elevation',      unit: ' m' },
+    { field: 'power_avg_w',     label: 'Highest avg power',   unit: ' W' },
+    { field: 'power_max_w',     label: 'Highest max power',   unit: ' W' },
+    { field: 'ftp',             label: 'Highest FTP',         unit: ' W' },
+    { field: 'speed_avg_kmh',   label: 'Highest avg speed',   unit: ' km/h' },
+    { field: 'speed_max_kmh',   label: 'Highest max speed',   unit: ' km/h' },
+    { field: 'calories',        label: 'Most calories burned',unit: ' kcal' },
+    { field: 'relative_effort', label: 'Toughest effort',     unit: '' },
+  ];
+
+  const results = specs.map(spec => {
+    const vals = rides
+      .map(r => ({ r, v: r[spec.field] }))
+      .filter(x => x.v !== null && x.v !== undefined && !isNaN(x.v));
+    if (!vals.length) return null;
+    const top = vals.reduce((a, b) => (b.v > a.v ? b : a));
+    return { label: spec.label, value: top.v, unit: spec.unit, rideName: top.r.map_name, rideDate: top.r.date };
+  }).filter(Boolean);
+
+  const moving = rides
+    .map(r => ({ r, secs: parseDuration(r.moving_time) }))
+    .filter(x => x.secs > 0);
+  if (moving.length) {
+    const top = moving.reduce((a, b) => (b.secs > a.secs ? b : a));
+    results.splice(1, 0, {
+      label: 'Longest time in the saddle',
+      value: formatDuration(top.secs),
+      unit: '',
+      rideName: top.r.map_name,
+      rideDate: top.r.date,
+    });
+  }
+
+  return results;
+}
+
+function applyMarquee(selector) {
+  document.querySelectorAll(selector).forEach(el => {
+    const text = el.textContent;
+    if (el.scrollWidth > el.clientWidth + 2) {
+      const duration = Math.max(6, text.length * 0.18).toFixed(1);
+      el.innerHTML = `<span class="record-meta-track" style="animation-duration:${duration}s">${text}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${text}</span>`;
+      el.classList.add('scrolling');
+    }
+  });
+}
+
+function renderRecords(rides) {
+  const records = computeRecords(rides);
+  const grid = document.getElementById('records-grid');
+  if (!records.length) {
+    grid.innerHTML = `<div class="chart-empty">No data yet.</div>`;
+    return;
+  }
+  grid.innerHTML = records.map(rec => `
+    <div class="record-card">
+      <div class="record-value">${rec.value}${rec.unit}</div>
+      <div class="record-label">${rec.label}</div>
+      <div class="record-meta">${rec.rideName || ''}${rec.rideDate ? ' · ' + rec.rideDate : ''}</div>
+    </div>
+  `).join('');
+  applyMarquee('#records-grid .record-meta');
+}
+
+function renderZones(rides) {
+  // Uses real per-ride time-in-zone data (seconds) recorded in each ride's "zones" object,
+  // summed across all rides — not an estimate from average power.
+  const withZones = rides.filter(r => r.zones);
+
+  const container = document.getElementById('zones-chart');
+  if (!withZones.length) {
+    container.innerHTML = `<div class="chart-empty">No zone data yet.</div>`;
+    return;
+  }
+
+  const totals = ZONE_DEFS.map(z => ({
+    ...z,
+    color: zoneColor(z.color),
+    seconds: withZones.reduce((s, r) => s + (r.zones[z.key] || 0), 0),
+  }));
+  const totalSeconds = totals.reduce((s, z) => s + z.seconds, 0);
+
+  const bar = totals
+    .filter(z => z.seconds > 0)
+    .map(z => `<div class="zone-seg" style="width:${(z.seconds / totalSeconds) * 100}%;background:${z.color}" title="${z.name}: ${formatDuration(z.seconds)}"></div>`)
+    .join('');
+  const legend = totals
+    .map(z => `<div class="zone-legend-item"><span class="zone-dot" style="background:${z.color}"></span>${z.name} (${formatDuration(z.seconds)})</div>`)
+    .join('');
+
+  container.innerHTML = `<div class="zone-bar">${bar}</div><div class="zone-legend">${legend}</div>`;
+}
+
+/* ---------------- New: Trends view ---------------- */
+function getWeekStart(dateStr) {
+  const d = new Date(dateStr);
+  const day = (d.getDay() + 6) % 7; // Monday = 0
+  d.setDate(d.getDate() - day);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function computeWeeklyTotals(rides) {
+  const map = new Map();
+  rides.forEach(r => {
+    if (!r.date) return;
+    const start = getWeekStart(r.date);
+    const key = start.toISOString().slice(0, 10);
+    if (!map.has(key)) map.set(key, { start, rides: 0, km: 0, secs: 0 });
+    const entry = map.get(key);
+    entry.rides++;
+    entry.km += r.distance_km || 0;
+    entry.secs += parseDuration(r.moving_time);
+  });
+  return Array.from(map.values()).sort((a, b) => b.start - a.start);
+}
+
+function renderWeekly(rides) {
+  const weeks = computeWeeklyTotals(rides);
+  const body = document.getElementById('weekly-body');
+  if (!weeks.length) {
+    body.innerHTML = `<tr><td colspan="4" class="chart-empty">No data yet.</td></tr>`;
+    return;
+  }
+  body.innerHTML = weeks.map(w => `
+    <tr>
+      <td>${w.start.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+      <td class="num">${w.rides}</td>
+      <td class="num">${w.km.toFixed(1)}</td>
+      <td class="num">${formatDuration(w.secs)}</td>
+    </tr>
+  `).join('');
+}
+
+function computeRouteHistory(rides) {
+  const map = new Map();
+  rides.forEach(r => {
+    const key = r.map_name || 'Unknown';
+    if (!map.has(key)) map.set(key, { name: key, count: 0, bestSpeed: null, lastDate: null });
+    const entry = map.get(key);
+    entry.count++;
+    if (r.speed_avg_kmh != null && (entry.bestSpeed === null || r.speed_avg_kmh > entry.bestSpeed)) {
+      entry.bestSpeed = r.speed_avg_kmh;
+    }
+    if (r.date && (!entry.lastDate || r.date > entry.lastDate)) entry.lastDate = r.date;
+  });
+  return Array.from(map.values()).sort((a, b) => b.count - a.count);
+}
+
+function renderRouteHistory(rides) {
+  const routes = computeRouteHistory(rides);
+  const body = document.getElementById('route-body');
+  if (!routes.length) {
+    body.innerHTML = `<tr><td colspan="4" class="chart-empty">No data yet.</td></tr>`;
+    return;
+  }
+  body.innerHTML = routes.map(rt => `
+    <tr>
+      <td class="name">${rt.name}</td>
+      <td class="num">${rt.count}</td>
+      <td class="num">${rt.bestSpeed != null ? rt.bestSpeed.toFixed(1) + ' km/h' : '—'}</td>
+      <td class="muted">${rt.lastDate || '—'}</td>
+    </tr>
+  `).join('');
+}
+
 /* ---------------- Boot ---------------- */
 function render(data) {
   currentRides = data.rides || [];
   renderTotals(currentRides);
   renderRows();
   if (document.getElementById('graph-view').classList.contains('active')) drawChart();
+  if (document.getElementById('records-view').classList.contains('active')) { renderRecords(currentRides); renderZones(currentRides); }
+  if (document.getElementById('trends-view').classList.contains('active')) { renderWeekly(currentRides); renderRouteHistory(currentRides); }
   document.getElementById('status').textContent = `Loaded ${currentRides.length} ride(s) from data.json`;
 }
 
