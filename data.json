@@ -364,6 +364,39 @@
         "anaerobic_sec": 47,
         "neuromuscular_sec": 11
       }
+    },
+    {
+      "date": "2026-09-13",
+      "time": "11:30",
+      "map_name": "City Reef Park (Australia)",
+      "distance_km": 13.97,
+      "moving_time": "39:23",
+      "elevation_m": 94,
+      "relative_effort": 68,
+      "weighted_avg_power_w": 117,
+      "total_work_kj": 274,
+      "training_load": 39,
+      "intensity_pct": 78,
+      "speed_avg_kmh": 21.3,
+      "speed_max_kmh": 54.4,
+      "heart_rate_avg_bpm": 162,
+      "heart_rate_max_bpm": 182,
+      "cadence_avg": 59,
+      "cadence_max": 93,
+      "power_avg_w": 116,
+      "power_max_w": 273,
+      "calories": 274,
+      "elapsed_time": "39:23",
+      "ftp": 150,
+      "zones": {
+        "recovery_sec": 24,
+        "endurance_sec": 1190,
+        "tempo_sec": 1004,
+        "threshold_sec": 100,
+        "vo2max_sec": 16,
+        "anaerobic_sec": 10,
+        "neuromuscular_sec": 20
+      }
     }
   ]
 }
