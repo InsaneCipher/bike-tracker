@@ -397,6 +397,39 @@
         "anaerobic_sec": 10,
         "neuromuscular_sec": 20
       }
+    },
+    {
+      "date": "2026-09-16",
+      "time": "17:57",
+      "map_name": "Lake Lucerne Loop (Switzerland)",
+      "distance_km": 14.70,
+      "moving_time": "33:20",
+      "elevation_m": 37,
+      "relative_effort": 58,
+      "weighted_avg_power_w": 141,
+      "total_work_kj": 276,
+      "training_load": 49,
+      "intensity_pct": 94,
+      "speed_avg_kmh": 26.5,
+      "speed_max_kmh": 44.9,
+      "heart_rate_avg_bpm": 162,
+      "heart_rate_max_bpm": 187,
+      "cadence_avg": 67,
+      "cadence_max": 100,
+      "power_avg_w": 138,
+      "power_max_w": 320,
+      "calories": 276,
+      "elapsed_time": "33:20",
+      "ftp": 150,
+      "zones": {
+        "recovery_sec": 14,
+        "endurance_sec": 170,
+        "tempo_sec": 799,
+        "threshold_sec": 706,
+        "vo2max_sec": 225,
+        "anaerobic_sec": 67,
+        "neuromuscular_sec": 20
+      }
     }
   ]
 }
