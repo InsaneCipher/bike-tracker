@@ -24,6 +24,7 @@
       "power_max_w": 179,
       "calories": 203,
       "ftp": 160,
+      "url": "https://www.strava.com/activities/19946800354",
       "elapsed_time": "35:34",
       "zones": {
         "recovery_sec": 218,
@@ -57,6 +58,7 @@
       "power_max_w": 248,
       "calories": 166,
       "ftp": 150,
+      "url": "https://www.strava.com/activities/19960230916",
       "elapsed_time": "27:32",
       "zones": {
         "recovery_sec": 100,
@@ -90,6 +92,7 @@
       "power_max_w": 216,
       "calories": 322,
       "ftp": 150,
+      "url": "https://www.strava.com/activities/19972582098",
       "elapsed_time": "50:54",
       "zones": {
         "recovery_sec": 128,
@@ -123,6 +126,7 @@
       "power_max_w": 260,
       "calories": 295,
       "ftp": 150,
+      "url": "https://www.strava.com/activities/20002427095",
       "elapsed_time": "44:36",
       "zones": {
         "recovery_sec": 140,
@@ -157,6 +161,7 @@
       "calories": 268,
       "elapsed_time": "41:45",
       "ftp": 150,
+      "url": "",
       "zones": {
         "recovery_sec": 97,
         "endurance_sec": 1748,
@@ -190,6 +195,7 @@
       "calories": 105,
       "elapsed_time": "15:30",
       "ftp": 150,
+      "url": "https://www.strava.com/activities/20038754186",
       "zones": {
         "recovery_sec": 20,
         "endurance_sec": 613,
@@ -223,6 +229,7 @@
       "calories": 233,
       "elapsed_time": "31:08",
       "ftp": 150,
+      "url": "https://www.strava.com/activities/20046102657",
       "zones": {
         "recovery_sec": 21,
         "endurance_sec": 441,
@@ -256,6 +263,7 @@
       "calories": 387,
       "elapsed_time": "54:12",
       "ftp": 150,
+      "url": "https://www.strava.com/activities/20059781122",
       "zones": {
         "recovery_sec": 118,
         "endurance_sec": 928,
@@ -289,6 +297,7 @@
       "calories": 180,
       "elapsed_time": "24:34",
       "ftp": 150,
+      "url": "https://www.strava.com/activities/20090656238",
       "zones": {
         "recovery_sec": 51,
         "endurance_sec": 323,
@@ -322,6 +331,7 @@
       "calories": 251,
       "elapsed_time": "33:42",
       "ftp": 150,
+      "url": "https://www.strava.com/activities/20120098527",
       "zones": {
         "recovery_sec": 25,
         "endurance_sec": 511,
@@ -355,6 +365,7 @@
       "calories": 486,
       "elapsed_time": "1:03:31",
       "ftp": 150,
+      "url": "https://www.strava.com/activities/20146445193",
       "zones": {
         "recovery_sec": 111,
         "endurance_sec": 412,
@@ -388,6 +399,7 @@
       "calories": 274,
       "elapsed_time": "39:23",
       "ftp": 150,
+      "url": "https://www.strava.com/activities/20156417565",
       "zones": {
         "recovery_sec": 24,
         "endurance_sec": 1190,
@@ -421,6 +433,7 @@
       "calories": 276,
       "elapsed_time": "33:20",
       "ftp": 150,
+      "url": "https://www.strava.com/activities/20203104974",
       "zones": {
         "recovery_sec": 14,
         "endurance_sec": 170,
