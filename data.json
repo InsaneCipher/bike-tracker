@@ -443,6 +443,40 @@
         "anaerobic_sec": 67,
         "neuromuscular_sec": 20
       }
+    },
+    {
+      "date": "2026-09-17",
+      "time": "20:01",
+      "map_name": "Camargue Plains (France)",
+      "distance_km": 13.81,
+      "moving_time": "36:05",
+      "elevation_m": 132,
+      "relative_effort": 82,
+      "weighted_avg_power_w": 130,
+      "total_work_kj": 280,
+      "training_load": 45,
+      "intensity_pct": 87,
+      "speed_avg_kmh": 23.0,
+      "speed_max_kmh": 57.9,
+      "heart_rate_avg_bpm": 169,
+      "heart_rate_max_bpm": 192,
+      "cadence_avg": 64,
+      "cadence_max": 96,
+      "power_avg_w": 130,
+      "power_max_w": 286,
+      "calories": 280,
+      "elapsed_time": "36:05",
+      "ftp": 150,
+      "url": "https://www.strava.com/activities/20218519933/zone-distribution",
+      "zones": {
+        "recovery_sec": 18,
+        "endurance_sec": 254,
+        "tempo_sec": 1323,
+        "threshold_sec": 453,
+        "vo2max_sec": 69,
+        "anaerobic_sec": 27,
+        "neuromuscular_sec": 22
+      }
     }
   ]
 }
