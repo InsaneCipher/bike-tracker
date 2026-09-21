@@ -501,7 +501,7 @@
       "calories": 250,
       "elapsed_time": "32:19",
       "ftp": 150,
-      "url": "https://www.strava.com/activities/20242038594/zone-distribution",
+      "url": "https://www.strava.com/activities/20242038594",
       "zones": {
         "recovery_sec": 63,
         "endurance_sec": 133,
@@ -535,7 +535,7 @@
       "calories": 205,
       "elapsed_time": "21:44",
       "ftp": 150,
-      "url": "https://www.strava.com/activities/20242404315/zone-distribution",
+      "url": "https://www.strava.com/activities/20242404315",
       "zones": {
         "recovery_sec": 46,
         "endurance_sec": 30,
@@ -544,6 +544,40 @@
         "vo2max_sec": 587,
         "anaerobic_sec": 134,
         "neuromuscular_sec": 27
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "time": "19:17",
+      "map_name": "Limmat Loop",
+      "distance_km": 17.74,
+      "moving_time": "40:13",
+      "elevation_m": 43,
+      "relative_effort": 76,
+      "weighted_avg_power_w": 141,
+      "total_work_kj": 336,
+      "training_load": 59,
+      "intensity_pct": 94,
+      "speed_avg_kmh": 26.5,
+      "speed_max_kmh": 42.9,
+      "heart_rate_avg_bpm": 164,
+      "heart_rate_max_bpm": 185,
+      "cadence_avg": 67,
+      "cadence_max": 91,
+      "power_avg_w": 139,
+      "power_max_w": 264,
+      "calories": 336,
+      "elapsed_time": "40:13",
+      "ftp": 160,
+      "url": "https://www.strava.com/activities/20271818152",
+      "zones": {
+        "recovery_sec": 17,
+        "endurance_sec": 85,
+        "tempo_sec": 1060,
+        "threshold_sec": 898,
+        "vo2max_sec": 254,
+        "anaerobic_sec": 77,
+        "neuromuscular_sec": 23
       }
     }
   ]
