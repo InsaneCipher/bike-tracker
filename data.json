@@ -568,7 +568,7 @@
       "power_max_w": 264,
       "calories": 336,
       "elapsed_time": "40:13",
-      "ftp": 160,
+      "ftp": 150,
       "url": "https://www.strava.com/activities/20271818152",
       "zones": {
         "recovery_sec": 17,
@@ -602,7 +602,7 @@
       "power_max_w": 247,
       "calories": 909,
       "elapsed_time": "1:53:55",
-      "ftp": 160,
+      "ftp": 150,
       "url": "https://www.strava.com/activities/20314045355",
       "zones": {
         "recovery_sec": 227,
@@ -612,6 +612,40 @@
         "vo2max_sec": 253,
         "anaerobic_sec": 64,
         "neuromuscular_sec": 10
+      }
+    },
+    {
+      "date": "2026-09-27",
+      "time": "17:53",
+      "map_name": "Heart of Switzerland (Switzerland)",
+      "distance_km": 25.65,
+      "moving_time": "1:01:31",
+      "elevation_m": 118,
+      "relative_effort": 107,
+      "weighted_avg_power_w": 137,
+      "total_work_kj": 498,
+      "training_load": 85,
+      "intensity_pct": 91,
+      "speed_avg_kmh": 25.0,
+      "speed_max_kmh": 54.8,
+      "heart_rate_avg_bpm": 162,
+      "heart_rate_max_bpm": 182,
+      "cadence_avg": 66,
+      "cadence_max": 85,
+      "power_avg_w": 135,
+      "power_max_w": 238,
+      "calories": 497,
+      "elapsed_time": "1:01:31",
+      "ftp": 150,
+      "url": "https://www.strava.com/activities/20355750814",
+      "zones": {
+        "recovery_sec": 65,
+        "endurance_sec": 354,
+        "tempo_sec": 2554,
+        "threshold_sec": 629,
+        "vo2max_sec": 23,
+        "anaerobic_sec": 67,
+        "neuromuscular_sec": 0
       }
     }
   ]
