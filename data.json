@@ -919,6 +919,40 @@
         "anaerobic_sec": 180,
         "neuromuscular_sec": 11
       }
+    },
+    {
+      "date": "2026-10-11",
+      "time": "15:03",
+      "map_name": "Tour Of Hegra (Arabia)",
+      "distance_km": 15.47,
+      "moving_time": "35:26",
+      "elevation_m": 54,
+      "relative_effort": 62,
+      "weighted_avg_power_w": 139,
+      "total_work_kj": 294,
+      "training_load": 44,
+      "intensity_pct": 87,
+      "speed_avg_kmh": 26.2,
+      "speed_max_kmh": 48.0,
+      "heart_rate_avg_bpm": 162,
+      "heart_rate_max_bpm": 180,
+      "cadence_avg": 68,
+      "cadence_max": 81,
+      "power_avg_w": 138,
+      "power_max_w": 214,
+      "calories": 293,
+      "elapsed_time": "35:26",
+      "ftp": 160,
+      "url": "https://www.strava.com/activities/20543138368",
+      "zones": {
+        "recovery_sec": 21,
+        "endurance_sec": 62,
+        "tempo_sec": 1648,
+        "threshold_sec": 331,
+        "vo2max_sec": 24,
+        "anaerobic_sec": 41,
+        "neuromuscular_sec": 0
+      }
     }
   ]
 }
