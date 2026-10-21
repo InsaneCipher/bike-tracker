@@ -1091,9 +1091,9 @@
       }
     },
     {
-      "date": "YYYY-MM-DD",
-      "time": "HH:MM",
-      "map_name": "???",
+      "date": "2026-10-20",
+      "time": "17:57",
+      "map_name": "Kluisbergen (Belgium)",
       "distance_km": 24.04,
       "moving_time": "1:01:12",
       "elevation_m": 138,
@@ -1112,7 +1112,7 @@
       "power_max_w": 223,
       "calories": 501,
       "elapsed_time": "1:01:12",
-      "ftp": null,
+      "ftp": 160,
       "url": "https://www.strava.com/activities/20664494385",
       "zones": {
         "recovery_sec": 60,
