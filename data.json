@@ -1089,6 +1089,40 @@
         "anaerobic_sec": 40,
         "neuromuscular_sec": 16
       }
+    },
+    {
+      "date": "YYYY-MM-DD",
+      "time": "HH:MM",
+      "map_name": "???",
+      "distance_km": 24.04,
+      "moving_time": "1:01:12",
+      "elevation_m": 138,
+      "relative_effort": 127,
+      "weighted_avg_power_w": 137,
+      "total_work_kj": 501,
+      "training_load": 75,
+      "intensity_pct": 86,
+      "speed_avg_kmh": 23.6,
+      "speed_max_kmh": 61.6,
+      "heart_rate_avg_bpm": 167,
+      "heart_rate_max_bpm": 181,
+      "cadence_avg": 66,
+      "cadence_max": 82,
+      "power_avg_w": 137,
+      "power_max_w": 223,
+      "calories": 501,
+      "elapsed_time": "1:01:12",
+      "ftp": null,
+      "url": "https://www.strava.com/activities/20664494385",
+      "zones": {
+        "recovery_sec": 60,
+        "endurance_sec": 215,
+        "tempo_sec": 2599,
+        "threshold_sec": 753,
+        "vo2max_sec": 17,
+        "anaerobic_sec": 29,
+        "neuromuscular_sec": 0
+      }
     }
   ]
 }
